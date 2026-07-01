@@ -149,7 +149,7 @@ namespace ShivaNegar.Constants
         internal const string ArchiveFolder = "بایگانی\\";
         internal const string VirastarFolder = "ویراستار\\";
         internal const string DocumentsTemplateFolder = "اسناد الگو\\";
-
+        
         internal const string TashdidFile = "Tashdid.csv";
         internal const string TanvinFile = "Tanvin.csv";
         internal const string SignFile = "Signs.csv";

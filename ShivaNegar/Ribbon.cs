@@ -1,9 +1,13 @@
-﻿using Microsoft.Office.Interop.Word;
+﻿using ShivaNegar.Constants;
+using ShivaNegar.Models;
+using Microsoft.Office.Interop.Word;
+using ShivaNegar;
 using ShivaNegar.Constants;
 using ShivaNegar.Models;
 using stdole;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -72,6 +76,13 @@ namespace ShivaNegar
                 new RibbonControlModel(RibbonControlNames.builtInDesignMode),
             };
 
+
+            RibbonControlModel[] galleryDocumentManagerItems = new RibbonControlModel[]
+            {
+                new RibbonControlModel("__id60",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ShivaNegarDocuments,true,true,"مدیریت اسناد","مدیریت اسناد","مدیریت اسناد","D"),
+                new RibbonControlModel("__id61",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ShivaNegarDocuments,true,true,"اسناد بایگانی","اسناد بایگانی","اسناد بایگانی","D"),
+                new RibbonControlModel("__id62",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ShivaNegarDocuments,true,true,"ایجاد سند جدید","ایجاد سند جدید","ایجاد سند جدید","D"),
+            };
             RibbonControlModel[] galleryFootnoteItems = new RibbonControlModel[]
             {
                 new RibbonControlModel("__id27",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.InsertFootnotePersian,true,true,"فارسی","درج پانویس فارسی","درج پانویس به صورت فارسی",null),
@@ -107,10 +118,8 @@ namespace ShivaNegar
             RibbonControlModel[] galleryExportItems = new RibbonControlModel[]
             {
                 new RibbonControlModel("__id34",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ExportGrayscale_2,true,true,"خروجی سیاه و سفید","خروجی سیاه و سفید","در این خروجی کلیه شکل های سند به صورت سیاه و سفید خواهند بود. این خروجی برای چاپ کاغذی سند به صورت سیاه و سفید مناسب است.",null),
-                new RibbonControlModel("__id35",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ExportIdentification,true,true,"خروجی همانند جویی","خروجی همانند جویی","در این خروجی مطابق با شیوه نامه همانندجویی کلیه شکل ها، جدول ها، فهرست ها و منابع حذف شده و متن سند برای ارسال به سامانه همانندجویی آماده می شود. این خروجی برای پایان نامه کارشناسی ارشد و رساله دکتری نیاز است.",null),
                 new RibbonControlModel("__id36",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ExportPDF,true,true,"PDF خروجی","PDF خروجی","سند را به قالبی تبدیل می کند که معمولا برای داوران محترم ارسال می شود. پس از اتمام نگارش و نهایی شدن سند از این خروجی استفاده کنید.",null),
-				new RibbonControlModel("__id37",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ExportLatex,true,true,"خروجی لاتکس",null,"ایجاد خروجی به فرمت لاتکس",null),
-				new RibbonControlModel("__id33",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ExportDocx,false,false,"Word خروجی","Word خروجی","نسخه ای از سند را در قالب ورد تهیه می کند که بدون نیاز به افزونه پارسانگار قابل استفاده است. در این نسخه دیگر امکان استفاده از قابلت های پارسانگار میسر نیست و برای ارائه به استاد راهنما، استاد مشاور، دفتر آموزش دانشگاه و سامانه ایرانداک مناسب است.",null),
+                new RibbonControlModel("__id33",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.ExportDocx,false,false,"Word خروجی","Word خروجی","نسخه ای از سند را در قالب ورد تهیه می کند که بدون نیاز به افزونه پارسانگار قابل استفاده است. در این نسخه دیگر امکان استفاده از قابلت های پارسانگار میسر نیست و برای ارائه به استاد راهنما، استاد مشاور، دفتر آموزش دانشگاه و سامانه ایرانداک مناسب است.",null),
             };
 
             RibbonControlModel[] galleryToolsItems = new RibbonControlModel[]
@@ -132,20 +141,21 @@ namespace ShivaNegar
            {
                 new RibbonControlModel("__id51",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.Tutorial,true,true,"آرشیو فیلم های راهنما","آرشیو فیلم های راهنما","",null),
                 new RibbonControlModel("__id52",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.Web,true,true,"سامانه شیوانگار","سامانه شیوانگار","",null),
-                new RibbonControlModel("__id53",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.Version,true,true,"درباره شیوانگار","درباره شیوانگار",null,null),
-                
+                new RibbonControlModel("__id53",RibbonControlModel.RibbonControlTypes.GalleryItem,Properties.ResourceRibbonIcons.Version,true,true,"درباره پارسانگار","درباره پارسانگار",null,null),
+
            };
 
 
             ribbonComponents = new List<RibbonControlModel>()
             {
-                new RibbonControlModel(RibbonControlNames.tabShivaNeger,RibbonControlModel.RibbonControlTypes.Tab,null,true,true,"پارسانگار",null,null,null),
+                new RibbonControlModel(RibbonControlNames.tabJameNeger,RibbonControlModel.RibbonControlTypes.Tab,null,true,true,"پارسانگار",null,null,null),
 
 
-                new RibbonControlModel(RibbonControlNames.btnDocumentsManagerBackstage,RibbonControlModel.RibbonControlTypes.BackstageButton,Properties.ResourceRibbonIcons.ShivanegarDocuments2,true,true,"پارسانگار",null,null,null),
+                new RibbonControlModel(RibbonControlNames.btnLogin, RibbonControlModel.RibbonControlTypes.Button, Properties.ResourceRibbonIcons.EditFile, true, true, "ورود به حساب کاربری", "ورود به حساب کاربری", "برای دسترسی به امکانات افزونه وارد حساب کاربری خود شوید", null),
+
 
                 new RibbonControlModel(RibbonControlNames.grpDocumentManager,RibbonControlModel.RibbonControlTypes.Group,null,true,true,"پارسانگار",null,null,null,null),
-                new RibbonControlModel(RibbonControlNames.btnDocumentsManager,RibbonControlModel.RibbonControlTypes.Button,Properties.ResourceRibbonIcons.ShivaNegarDocuments,true,true,"مدیریت اسناد","مدیریت اسناد","بازکردن سند، ایجاد سند و مدیریت اسناد جاری و بایگانی شده","D"),
+                new RibbonControlModel(RibbonControlNames.galleryDocumentsManager,RibbonControlModel.RibbonControlTypes.Gallery,Properties.ResourceRibbonIcons.ShivaNegarDocuments,true,true,"مدیریت اسناد","مدیریت اسناد",null,null,galleryDocumentManagerItems),
                 new RibbonControlModel(RibbonControlNames.btnChatBoxNetworking,RibbonControlModel.RibbonControlTypes.Button,Properties.ResourceRibbonIcons.Messages,true,true,"تبادل نظر","تبادل نظر","گفگتو و تبادل نظر بین افراد مشترک مرتبط با سند","C"),
                 new RibbonControlModel(RibbonControlNames.btnChangeContents,RibbonControlModel.RibbonControlTypes.Button,Properties.ResourceRibbonIcons.EditFile,true,true,"ویرایش اطلاعات","ویرایش اطلاعات","ویرایش برخی از اطلاعات شناسنامه ای سند جاری",null),
                 new RibbonControlModel(RibbonControlNames.btnAddRemovePages,RibbonControlModel.RibbonControlTypes.Button,Properties.ResourceRibbonIcons.AddFile,true,true,"صفحه‌بندی","صفحه‌بندی و فصل‌بندی","حذف و اضافه صفحات اختیاری و مدیریت فصل های سند جاری",null),
@@ -256,14 +266,44 @@ namespace ShivaNegar
         }
         public bool getEnabled(Microsoft.Office.Core.IRibbonControl control)
         {
-            bool status = ribbonComponents.Where(p => p.Id == control.Id).First().Enable;
-            return status;
+            if (control.Id == "btnLogin")
+            {
+                // دکمه لاگین همیشه فعال باشد
+                return true;
+            }
+            if (control.Id == "galleryDocumentsManager")
+            {
+                return true;
+            }
+            else
+            {
+                bool status = ribbonComponents.Where(p => p.Id == control.Id).First().Enable;
+                return status;
+            }
+            //return true;
         }
+
         public bool getVisible(Microsoft.Office.Core.IRibbonControl control)
         {
+            bool isLoggedIn = !string.IsNullOrEmpty(Properties.Settings.Default.UserToken);
+
+            // کنترل‌های خاص
+            if (control.Id == RibbonControlNames.btnLogin)
+            {
+                // دکمه لاگین: فقط در صورت لاگین نبودن
+                return !isLoggedIn;
+            }
+            if (control.Id == RibbonControlNames.galleryDocumentsManager)
+            {
+                // گالری: فقط در صورت لاگین بودن
+                return isLoggedIn;
+            }
+
+            // بقیه کنترلها از تنظیمات اصلی
             bool status = ribbonComponents.Where(p => p.Id == control.Id).First().Visible;
             return status;
         }
+
         public string getLabel(Microsoft.Office.Core.IRibbonControl control)
         {
             string text = ribbonComponents.Where(p => p.Id == control.Id).First().Label;
@@ -357,15 +397,18 @@ namespace ShivaNegar
         {
             this.ribbon = ribbonUI;
         }
-
-        public void btnShivanegar_Click(Microsoft.Office.Core.IRibbonControl control)
-        {
-            Ribbon.setTabProperties("", true);
-        }
-        public void btnDocumentsManager_Click(Microsoft.Office.Core.IRibbonControl control)
+        public void btnLogin_Click(Microsoft.Office.Core.IRibbonControl control)
         {
             Globals.ThisAddIn.documentsManager();
         }
+        public void btnShivaNegar_Click(Microsoft.Office.Core.IRibbonControl control)
+        {
+            Ribbon.setTabProperties("", true);
+        }
+        //public void btnDocumentsManager_Click(Microsoft.Office.Core.IRibbonControl control)
+        //{
+        //    Globals.ThisAddIn.documentsManager();
+        //}
         public void btnChatBoxNetworking_Click(Microsoft.Office.Core.IRibbonControl control)
         {
             Globals.ThisAddIn.chatBoxNetworking();
@@ -377,6 +420,31 @@ namespace ShivaNegar
         public void btnAddRemovePages_Click(Microsoft.Office.Core.IRibbonControl control)
         {
             Globals.ThisAddIn.addRemovePages();
+        }
+
+        public void galleryDocumentManager_Click(Microsoft.Office.Core.IRibbonControl control, string selectedId, int selectedIndex)
+        {
+
+            if (selectedIndex == 0)
+            {
+                Globals.ThisAddIn.documentsManager();
+            }
+            else if (selectedIndex == 1)
+            {
+
+
+                Globals.ThisAddIn.documentsManagerArchive();
+
+
+            }
+            else if (selectedIndex == 2)
+            {
+
+
+                Globals.ThisAddIn.documentsManagerCreate();
+
+            }
+
         }
 
         #region DialogLauncher 
@@ -684,7 +752,7 @@ namespace ShivaNegar
         #region Helpers
         public static void setTabProperties(string label, bool activate)
         {
-            string id = RibbonControlNames.tabShivaNeger;
+            string id = RibbonControlNames.tabJameNeger;
 
             RibbonControlModel rp = Globals.Ribbon?.ribbonComponents?.Where(p => p.Id == id).First();
 
@@ -831,7 +899,7 @@ namespace ShivaNegar
         {
             return new List<KeyboardRelationModel>
                 {
-                    new KeyboardRelationModel("documentsManager",KeyboardShortcuts.documentsManager,RibbonControlNames.btnDocumentsManager,"\n(Alt+F1)"),
+                    //new KeyboardRelationModel("documentsManager",KeyboardShortcuts.documentsManager,RibbonControlNames.btnDocumentsManager,"\n(Alt+F1)"),
                     new KeyboardRelationModel("changeContent",KeyboardShortcuts.changeContent,RibbonControlNames.btnChangeContents,"\n(Alt+F2)"),
                     new KeyboardRelationModel("addRemovePages",KeyboardShortcuts.addRemovePages,RibbonControlNames.btnAddRemovePages,"\n(Alt+F3)"),
 
@@ -1008,6 +1076,8 @@ namespace ShivaNegar
 
         #endregion
 
+
+
         internal static void InitializeRibbon(string ribbonTitle)
         {
             Ribbon.setTabProperties(ribbonTitle, true);
@@ -1022,8 +1092,9 @@ namespace ShivaNegar
 
                 List<string> exceptEnable = new List<string>()
                 {
-                    RibbonControlNames.btnDocumentsManagerBackstage,
-                    RibbonControlNames.btnDocumentsManager,
+                    //RibbonControlNames.btnDocumentsManagerBackstage,
+                    //RibbonControlNames.btnDocumentsManager,
+                    //RibbonControlNames.btnLogin,
                 };
 
                 //List<string> exceptVisibility = new List<string>()
@@ -1100,16 +1171,21 @@ namespace ShivaNegar
         }
     }
 
+
+
     internal struct RibbonControlNames
     {
-        internal const string tabShivaNeger = "tabShivaNeger";
+        internal const string tabJameNeger = "tabJameNeger";
+
+        internal const string btnLogin = "btnLogin";
+
+        internal const string galleryDocumentsManager = "galleryDocumentsManager";
 
         internal const string btnChatBoxNetworking = "btnChatBoxNetworking";
 
         internal const string grpDocumentManager = "grpDocumentManager";
-        internal const string btnDocumentsManager = "btnDocumentsManager";
 
-        internal const string btnDocumentsManagerBackstage = "btnDocumentsManagerBackstage";
+        //internal const string btnDocumentsManagerBackstage = "btnDocumentsManagerBackstage";
         internal const string btnChangeContents = "btnChangeContents";
         internal const string btnAddRemovePages = "btnAddRemovePages";
 

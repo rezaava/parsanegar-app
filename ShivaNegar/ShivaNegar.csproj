@@ -857,6 +857,7 @@
     <None Include="ShivaNegar_3_TemporaryKey.pfx" />
     <None Include="ShivaNegar_4_TemporaryKey.pfx" />
     <None Include="ShivaNegar_5_TemporaryKey.pfx" />
+    <None Include="ShivaNegar_6_TemporaryKey.pfx" />
     <None Include="ShivaNegar_TemporaryKey.pfx" />
     <EmbeddedResource Include="Templates\IslamicAzadUniversityCentral\14_Chapter1.docx" />
     <EmbeddedResource Include="Templates\IslamicAzadUniversityCentral\14_Chapter10.docx" />
@@ -1215,13 +1216,13 @@
     <!-- <GenerateManifests>false</GenerateManifests> -->
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>61581FAAB06E0259044FA1FA37D64277499BEB4D</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>9BA7688DCD7B61C67AC33622368BDF7D30E9EA41</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ShivaNegar_5_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>ShivaNegar_6_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
   </PropertyGroup>

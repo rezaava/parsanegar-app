@@ -49,52 +49,48 @@ namespace ShivaNegar.Forms.BesmellahPage
                 fontName = Constants.FontNames.fontBesmellah2;
             else if (comboBesmellahFontType.SelectedIndex == 2)
                 fontName = Constants.FontNames.fontBesmellah3;
-            //else if (comboBesmellahFontType.SelectedIndex == 3)
-            //	fontName = Constants.FontNames.fontBesmellah4;
 
-
-            loadingControl.Tag = "در انتظار انتخاب مکان خروجی";
+            loadingControl.Tag = "در حال ایجاد سند جدید";
             loadingControl.IsEnabled = true;
 
-            System.Windows.Forms.SaveFileDialog fileDialog = new System.Windows.Forms.SaveFileDialog();
-            fileDialog.Title = "مکان و نام خروجی فایل خود را مشخص کنید";
-            fileDialog.AddExtension = false;
-            fileDialog.Filter = "Word Document (*.docx)|*.docx";
-
-            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            try
             {
-                if (fileDialog.FileName != Globals.ThisAddIn.Application.ActiveDocument.FullName)
-                {
-                    Globals.ThisAddIn.DisableEvents = true;
-                    Document specifiedDocument = Globals.ThisAddIn.Application.Documents.Add();
-                    Globals.ThisAddIn.DisableEvents = false;
-                    Microsoft.Office.Interop.Word.Window window = specifiedDocument.ActiveWindow;
-                    Selection selection = window.Selection;
-                    window.Visible = false;
+                // ایجاد سند جدید ورد
+                Globals.ThisAddIn.DisableEvents = true;
+                Document newDocument = Globals.ThisAddIn.Application.Documents.Add();
+                Globals.ThisAddIn.DisableEvents = false;
 
-                    DedicatedFunctions.BesmellahToImage(selection, 200, fontName, lblNameOfAllah.Text);
-                    window.Visible = true;
+                // استفاده از نام کامل برای Window
+                Microsoft.Office.Interop.Word.Window window = newDocument.ActiveWindow;
+                Selection selection = window.Selection;
 
-                    selection.HomeKey();
-                    selection.HomeKey();
-                    selection.Font.Size = 12;
-                    selection.Font.SizeBi = 12;
-                    selection.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
-                    selection.ParagraphFormat.Space1();
-                    selection.InsertParagraph();
-                    selection.InsertParagraph();
-                    selection.InsertParagraph();
-                    specifiedDocument.SaveAs2(fileDialog.FileName);
+                // مخفی کردن پنجره موقتاً برای سرعت بیشتر
+                window.Visible = false;
 
-                    CloseFormRequest?.Invoke();
-                }
-                else
-                {
-                    DedicatedFunctions.ShowErrorMessage("سند خروجی نمیتواند با سند اختصاصی شما جایگزین شود، لطفا با نامی دیگر سند را ذخیره کنید");
-                }
+                // اضافه کردن بسم الله به سند جدید
+                DedicatedFunctions.BesmellahToImage(selection, 200, fontName, lblNameOfAllah.Text);
+
+                // تنظیمات نهایی سند
+                selection.HomeKey();
+                selection.HomeKey();
+                selection.Font.Size = 12;
+                selection.Font.SizeBi = 12;
+                selection.ParagraphFormat.Alignment = WdParagraphAlignment.wdAlignParagraphCenter;
+                selection.ParagraphFormat.Space1();
+                selection.InsertParagraph();
+                selection.InsertParagraph();
+                selection.InsertParagraph();
+
+                // نمایش سند
+                window.Visible = true;
+
+                // بستن فرم فعلی
+                CloseFormRequest?.Invoke();
             }
-            else
+            catch (Exception ex)
             {
+                DedicatedFunctions.ShowErrorMessage("خطا در ایجاد سند جدید: " + ex.Message);
+                loadingControl.IsEnabled = false;
             }
         }
         private void BtnMinimize_Click(object sender, System.Windows.RoutedEventArgs e)

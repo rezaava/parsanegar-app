@@ -264,6 +264,21 @@ namespace ShivaNegar.Forms.ShivaNegarManager
         //}
         //#endregion
 
+
+        public ShivaNegarControl GetMainControl()
+        {
+            return shivaNegarControl;
+        }
+
+
+        public void ShowArchiveDocuments()
+        {
+            if (shivaNegarControl != null)
+            {
+                shivaNegarControl.ShowDocumentManagerWithArchive();
+            }
+        }
+
         #region Optimize
         static void setDoubleBuffer(Control ctrl, bool doubleBuffered)
         {

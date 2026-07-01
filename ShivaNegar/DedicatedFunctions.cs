@@ -4602,27 +4602,54 @@ namespace ShivaNegar
             int width = size.Width;
             int height = size.Height;
 
-            using (Bitmap bitmap = new Bitmap(width, height))
+            int finalWidth = (int)(width * 1.3);
+            int finalHeight = (int)(height * 1.3);
+            int xOffset = (int)(width * 0.15);
+            int yOffset = (int)(height * 0.15);
+
+
+            using (Bitmap bitmap = new Bitmap(finalWidth, finalHeight))
             {
                 using (Graphics graphic = Graphics.FromImage(bitmap))
                 {
-                    System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(0, 0, width, height);
-
                     graphic.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
 
                     StringFormat format = new StringFormat();
                     format.LineAlignment = StringAlignment.Center;
                     format.Alignment = StringAlignment.Center;
+                    format.FormatFlags = StringFormatFlags.NoClip;  // <-- فقط این خط جدید
 
+                    System.Drawing.Rectangle rectangle = new System.Drawing.Rectangle(xOffset, yOffset, width, height);
                     graphic.DrawString(text, font, System.Drawing.Brushes.Black, rectangle, format);
-                    graphic.DrawRectangle(Pens.Transparent, rectangle);
+
                 }
                 try
                 {
-                    string tempImageUniversityPath = DedicatedFunctions.copyImageToTempFolder(bitmap, "TextBesmellah");
-                    DedicatedFunctions.insertFormPicture(selection, DedicatedFunctions.copyImageToTempFolder(bitmap, "TextBesmellah"), WdWrapType.wdWrapInline);
-                    DedicatedFunctions.removeFileFromSystem(tempImageUniversityPath);
-                    DedicatedFunctions.changeStyleInSelection(selection, StyleNames.styleNormal);
+                    string tempImagePath = copyImageToTempFolder(bitmap, "TextBesmellah");
+
+                    selection.Range.Select();
+                    InlineShape inlineShape = selection.InlineShapes.AddPicture(tempImagePath);
+
+                    removeFileFromSystem(tempImagePath);
+
+                    Shape shape = inlineShape.ConvertToShape();
+
+                    shape.WrapFormat.Type = WdWrapType.wdWrapSquare;
+                    shape.WrapFormat.Side = WdWrapSideType.wdWrapBoth;
+
+                    shape.RelativeHorizontalPosition = WdRelativeHorizontalPosition.wdRelativeHorizontalPositionPage;
+                    shape.RelativeVerticalPosition = WdRelativeVerticalPosition.wdRelativeVerticalPositionPage;
+
+                    float pageWidth = selection.PageSetup.PageWidth;
+                    float pageHeight = selection.PageSetup.PageHeight;
+
+                    shape.Left = (pageWidth - shape.Width) / 2;
+                    shape.Top = (pageHeight - shape.Height) / 2;
+
+                    shape.LockAspectRatio = Microsoft.Office.Core.MsoTriState.msoTrue;
+
+                    shape.Select();
+                    changeStyleInSelection(selection, StyleNames.styleNormal);
                 }
                 catch (Exception)
                 {

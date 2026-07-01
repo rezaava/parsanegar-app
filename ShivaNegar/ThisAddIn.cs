@@ -835,6 +835,59 @@ namespace ShivaNegar
             //MessageBox.Show(sw.ElapsedMilliseconds.ToString());
             //sw.Stop();
         }
+
+        public void documentsManagerArchive()
+        {
+            try
+            {
+                if (DocumentManagerFormVisible && documentManagerForm != null)
+                {
+                    documentManagerForm.ShowArchiveDocuments();
+                    documentManagerForm.Focus();
+                }
+                else
+                {
+                    documentManagerForm = new ShivaNegarForm(true);
+                    documentManagerForm.Show();
+                    DocumentManagerFormVisible = true;
+                    documentManagerForm.ShowArchiveDocuments();
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        public void documentsManagerCreate()
+        {
+            try
+            {
+                if (DocumentManagerFormVisible && documentManagerForm != null)
+                {
+                    var mainControl = documentManagerForm.GetMainControl();
+                    if (mainControl != null)
+                    {
+                        mainControl.CreateDocumentPage();
+                    }
+                    documentManagerForm.Focus();
+                }
+                else
+                {
+                    documentManagerForm = new ShivaNegarForm(true);
+                    documentManagerForm.Show();
+                    DocumentManagerFormVisible = true;
+
+                    var mainControl = documentManagerForm.GetMainControl();
+                    if (mainControl != null)
+                    {
+                        mainControl.CreateDocumentPage();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
         public void ShowAbout()
         {
             try

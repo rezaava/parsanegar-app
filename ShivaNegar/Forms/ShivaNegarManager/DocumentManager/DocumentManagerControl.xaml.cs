@@ -87,6 +87,22 @@ namespace ShivaNegar.Forms.ShivaNegarManager.DocumentManager
             radioBtnNetworking.Click += RadioBtnNetworking_Click;
         }
 
+        public void SelectArchiveTab()
+        {
+            // تغییر رنگ دکمه‌ها
+            radioBtnNetworking.Foreground = System.Windows.Media.Brushes.White;
+            radioBtnNetworking.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#007ac1");
+
+            radioBtnArchives.Foreground = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#007ac1");
+            radioBtnArchives.Background = System.Windows.Media.Brushes.White;
+            radioBtnAllDocuments.Foreground = System.Windows.Media.Brushes.White;
+            radioBtnAllDocuments.Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#007ac1");
+
+            // ✅ این خط مهم است - تغییر صفحه به بایگانی
+            NavigationVm.goToArchive = true;
+            NavigationVm.CurrentView = new DocumentsVM(true);
+        }
+
         private void RadioBtnNetworking_Click(object sender, RoutedEventArgs e)
         {
             radioBtnNetworking.Foreground = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFrom("#007ac1");
@@ -207,8 +223,7 @@ namespace ShivaNegar.Forms.ShivaNegarManager.DocumentManager
             radioBtnNetworking.IsEnabled = true;
             btnLogout.IsEnabled = true;
 
-            NavigationVm.goToArchive = false;
-            NavigationVm.CurrentView = new DocumentsVM(false);
+            NavigationVm.CurrentView = new DocumentsVM(NavigationVm.goToArchive);
 
             checkNetworkingRequests();
         }

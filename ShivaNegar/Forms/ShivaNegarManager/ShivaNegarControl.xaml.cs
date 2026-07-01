@@ -1,14 +1,15 @@
-﻿using System;
+﻿using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
+using ShivaNegar.Forms.ShivaNegarManager.DocumentManager;
+using ShivaNegar.Forms.ShivaNegarManager.DocumentManager.Models;
+using ShivaNegar.Forms.ShivaNegarManager.DocumentManager.ViewModel;
+using ShivaNegar.Models;
+using System;
 using System.Text.Json;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
-using MaterialDesignColors;
-using MaterialDesignThemes.Wpf;
-using ShivaNegar.Forms.ShivaNegarManager.DocumentManager.Models;
-using ShivaNegar.Forms.ShivaNegarManager.DocumentManager.ViewModel;
-using ShivaNegar.Models;
 
 namespace ShivaNegar.Forms.ShivaNegarManager
 {
@@ -231,6 +232,27 @@ namespace ShivaNegar.Forms.ShivaNegarManager
         private void loadCtrlCheckingUpdated_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        public DocumentManagerControl DocumentManagerControl => documentManager;
+
+        internal void ShowDocumentManagerWithArchive()
+        {
+            transitionMain.SelectedIndex = 0;
+
+            if (documentManager != null && documentManager.NavigationVm != null)
+            {
+                documentManager.NavigationVm.goToArchive = true;
+            }
+
+
+            documentManager.goToDocumentsPage();
+
+        }
+
+        internal void CreateDocumentPage()
+        {
+            transitionMain.SelectedIndex = 1;
         }
     }
 
