@@ -131,7 +131,7 @@ namespace ShivaNegar.Constants
         internal static string[] AdministratorAccounts = { "09355374226", "09132233916" , "09912071445" };
 
         internal const string PrimaryServerApiBaseAddress = PrimaryServerBaseAddress + "api/";
-        internal const string PrimaryServerBaseAddress = "http://aneto.ir/";
+        internal const string PrimaryServerBaseAddress = "http://shivanegar.ir/";
 
         internal const string NameOfProject = "پارسانگار";
         internal const string SupportEmail = "nazariansani@gmail.com";

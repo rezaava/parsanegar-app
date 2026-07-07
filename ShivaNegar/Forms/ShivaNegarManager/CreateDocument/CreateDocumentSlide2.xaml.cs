@@ -287,7 +287,7 @@ namespace ShivaNegar.Forms.ShivaNegarManager.CreateDocument
             validationText.Text = "در حال بررسی...";
             validationText.Foreground = Brushes.Blue;
             String token = Properties.Settings.Default.UserToken;
-            string urlParameters = "get-package?package="+comboDocumentType.SelectedIndex.ToString();
+            string urlParameters = "get-package/parsanegar/1?package="+comboDocumentType.SelectedIndex.ToString();
             DedicatedFunctions.httpAsyncGetRequest(StringConstant.PrimaryServerApiBaseAddress, urlParameters, token,
             OnResult =>
             {
@@ -341,7 +341,7 @@ namespace ShivaNegar.Forms.ShivaNegarManager.CreateDocument
         private void checkNameNotExist()
         {
             String token = Properties.Settings.Default.UserToken;
-            string urlParameters = "get-data";
+            string urlParameters = "get-data/parsanegar/1";
             DedicatedFunctions.httpAsyncGetRequest(StringConstant.PrimaryServerApiBaseAddress, urlParameters, token,
             OnResult =>
             {

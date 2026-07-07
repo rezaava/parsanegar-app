@@ -455,7 +455,7 @@ namespace ShivaNegar.Forms.ChangeContents
 
                     string token = DedicatedFunctions.getStaticVariableValue(doc, VariableServerIDs._variable_server_UserToken.ToString());
                     string documentID = DedicatedFunctions.getStaticVariableValue(doc, VariableServerIDs._variable_server_DocumentID.ToString());
-                    string urlParameters = "save?id=" + documentID + "&config=" + jsonVariables.ToString();
+                    string urlParameters = "save/parsanegar/1?id=" + documentID + "&config=" + jsonVariables.ToString();
 
                     Dispatcher.Invoke(() =>
                     {
