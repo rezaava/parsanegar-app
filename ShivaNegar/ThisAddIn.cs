@@ -302,6 +302,7 @@ namespace ShivaNegar
         {
             try
             {
+                await CsvDownloader.DownloadAllCsvFilesAsync();
                 //unload already exists dedicated keyboard shortcuts
 
                 if (!Globals.ThisAddIn.SetKeyBindingStatus)
@@ -1510,28 +1511,28 @@ namespace ShivaNegar
             }
 
             DedicatedFunctions.AccessType accessType = DedicatedFunctions.hasAccess(doc);
+
+            string virastarFolder = Properties.Settings.Default.WorkSpaceDirectory + StringConstant.VirastarFolder;
+
             if (accessType == AccessType.AccessGranted || accessType == AccessType.AccessGranted_Administrator)
             {
-                StreamReader reader;
-                string virastarFolder = Properties.Settings.Default.WorkSpaceDirectory + StringConstant.VirastarFolder;
-                string filePath = virastarFolder + StringConstant.HalfSpaceFile;
-
-                if (Directory.Exists(virastarFolder) && File.Exists(filePath))
-                    reader = new StreamReader(filePath, Encoding.UTF8);
-                else
-                    reader = new StreamReader(DedicatedFunctions.getStream(EmbeddedResourceNames.HalfSpace), Encoding.UTF8);
-
                 List<SearchReplaceModel> standardModels = new List<SearchReplaceModel>();
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+
+                if (Directory.Exists(virastarFolder))
                 {
-                    var standardItems = csv.GetRecords<SearchReplaceModel>();
-                    foreach (var standardItem in standardItems)
+                    string[] files = Directory.GetFiles(
+                        virastarFolder,
+                        $"*{StringConstant.ButtonCodeSigns}.csv");
+
+                    foreach (string file in files)
                     {
-                        standardModels.Add(standardItem);
+                        using (StreamReader reader = new StreamReader(file, Encoding.UTF8))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                        {
+                            standardModels.AddRange(csv.GetRecords<SearchReplaceModel>());
+                        }
                     }
                 }
-                reader.Close();
-                reader.Dispose();
 
 
                 LoadingForm loadingForm = new LoadingForm();
@@ -1571,26 +1572,26 @@ namespace ShivaNegar
             DedicatedFunctions.AccessType accessType = DedicatedFunctions.hasAccess(doc);
             if (accessType == AccessType.AccessGranted || accessType == AccessType.AccessGranted_Administrator)
             {
-                StreamReader reader;
                 string virastarFolder = Properties.Settings.Default.WorkSpaceDirectory + StringConstant.VirastarFolder;
-                string filePath = virastarFolder + StringConstant.spellingCorrectionFile;
-
-                if (Directory.Exists(virastarFolder) && File.Exists(filePath))
-                    reader = new StreamReader(filePath, Encoding.UTF8);
-                else
-                    reader = new StreamReader(DedicatedFunctions.getStream(EmbeddedResourceNames.SpellingCorrection), Encoding.UTF8);
 
                 List<SearchReplaceModel> standardModels = new List<SearchReplaceModel>();
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                if (Directory.Exists(virastarFolder))
                 {
-                    var standardItems = csv.GetRecords<SearchReplaceModel>();
-                    foreach (var standardItem in standardItems)
+                    string[] files = Directory.GetFiles(
+                        virastarFolder,
+                        $"*{StringConstant.ButtonCodeSpelling}.csv");
+
+                    foreach (string file in files)
                     {
-                        standardModels.Add(standardItem);
+                        using (StreamReader reader = new StreamReader(file, Encoding.UTF8))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                        {
+                            standardModels.AddRange(csv.GetRecords<SearchReplaceModel>());
+                        }
                     }
                 }
-                reader.Close();
-                reader.Dispose();
+
+
 
                 LoadingForm loadingForm = new LoadingForm();
                 if (doc.ActiveWindow.Selection.Words.Count >= 2)
@@ -1629,62 +1630,25 @@ namespace ShivaNegar
             if (accessType == AccessType.AccessGranted || accessType == AccessType.AccessGranted_Administrator)
             {
 
-                StreamReader reader;
-                StreamReader reader2;
-                StreamReader reader3;
                 string virastarFolder = Properties.Settings.Default.WorkSpaceDirectory + StringConstant.VirastarFolder;
-                string tanvinFile = virastarFolder + StringConstant.TanvinFile;
-                string SignsFile = virastarFolder + StringConstant.SignFile;
-                string TashdidFile = virastarFolder + StringConstant.TashdidFile;
-
-                if (Directory.Exists(virastarFolder) && File.Exists(tanvinFile))
-                    reader = new StreamReader(tanvinFile, Encoding.UTF8);
-                else
-                    reader = new StreamReader(DedicatedFunctions.getStream(EmbeddedResourceNames.Tanvin), Encoding.UTF8);
-
-                if (Directory.Exists(virastarFolder) && File.Exists(SignsFile))
-                    reader2 = new StreamReader(SignsFile, Encoding.UTF8);
-                else
-                    reader2 = new StreamReader(DedicatedFunctions.getStream(EmbeddedResourceNames.Signs), Encoding.UTF8);
-
-                if (Directory.Exists(virastarFolder) && File.Exists(TashdidFile))
-                    reader3 = new StreamReader(TashdidFile, Encoding.UTF8);
-                else
-                    reader3 = new StreamReader(DedicatedFunctions.getStream(EmbeddedResourceNames.Tashdid), Encoding.UTF8);
 
                 List<SearchReplaceModel> standardModels = new List<SearchReplaceModel>();
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    var standardItems = csv.GetRecords<SearchReplaceModel>();
-                    foreach (var standardItem in standardItems)
-                    {
-                        standardModels.Add(standardItem);
-                    }
-                }
-                reader.Close();
-                reader.Dispose();
 
-                using (var csv = new CsvReader(reader2, CultureInfo.InvariantCulture))
+                if (Directory.Exists(virastarFolder))
                 {
-                    var standardItems = csv.GetRecords<SearchReplaceModel>();
-                    foreach (var standardItem in standardItems)
-                    {
-                        standardModels.Add(standardItem);
-                    }
-                }
-                reader2.Close();
-                reader2.Dispose();
+                    string[] files = Directory.GetFiles(
+                        virastarFolder,
+                        $"*{StringConstant.ButtonCodeSigns}.csv");
 
-                using (var csv = new CsvReader(reader3, CultureInfo.InvariantCulture))
-                {
-                    var standardItems = csv.GetRecords<SearchReplaceModel>();
-                    foreach (var standardItem in standardItems)
+                    foreach (string file in files)
                     {
-                        standardModels.Add(standardItem);
+                        using (StreamReader reader = new StreamReader(file, Encoding.UTF8))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                        {
+                            standardModels.AddRange(csv.GetRecords<SearchReplaceModel>());
+                        }
                     }
                 }
-                reader3.Close();
-                reader3.Dispose();
 
                 // correct Spaces
                 SearchReplaceModel whiteSpaceCorrection = new SearchReplaceModel()
@@ -1742,29 +1706,26 @@ namespace ShivaNegar
             DedicatedFunctions.AccessType accessType = DedicatedFunctions.hasAccess(doc);
             if (accessType == AccessType.AccessGranted || accessType == AccessType.AccessGranted_Administrator)
             {
-                StreamReader reader;
                 string virastarFolder = Properties.Settings.Default.WorkSpaceDirectory + StringConstant.VirastarFolder;
-                string standardCorrectionFile = virastarFolder + StringConstant.StandardCorrectionFile;
-                if (Directory.Exists(virastarFolder) && File.Exists(standardCorrectionFile))
-                {
-                    reader = new StreamReader(standardCorrectionFile, Encoding.UTF8);
-                }
-                else
-                {
-                    reader = new StreamReader(DedicatedFunctions.getStream(EmbeddedResourceNames.Standard), Encoding.UTF8);
-                }
 
                 List<SearchReplaceModel> standardModels = new List<SearchReplaceModel>();
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+
+                if (Directory.Exists(virastarFolder))
                 {
-                    var standardItems = csv.GetRecords<SearchReplaceModel>();
-                    foreach (var standardItem in standardItems)
+                    string[] files = Directory.GetFiles(
+                        virastarFolder,
+                        $"*{StringConstant.ButtonCodeStandard}.csv"
+                        );
+
+                    foreach (string file in files)
                     {
-                        standardModels.Add(standardItem);
+                        using (StreamReader reader = new StreamReader(file, Encoding.UTF8))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                        {
+                            standardModels.AddRange(csv.GetRecords<SearchReplaceModel>());
+                        }
                     }
                 }
-                reader.Close();
-                reader.Dispose();
 
                 LoadingForm loadingForm = new LoadingForm();
 

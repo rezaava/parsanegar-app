@@ -28,6 +28,11 @@ using ShivaNegar.Models;
 using ShivaNegar.TaskPanes.CrossReference;
 using ShivaNegar.Templates;
 
+
+// new using 
+
+using Task = System.Threading.Tasks.Task;
+
 namespace ShivaNegar
 {
     internal class DedicatedFunctions
@@ -6467,4 +6472,151 @@ namespace ShivaNegar
         #endregion
 
     }
+
+
+    #region new func
+    public static class CsvDownloader
+    {
+        public static List<string> GetCsvFilesByCode(string code)
+        {
+            string virastarFolder =
+                Properties.Settings.Default.WorkSpaceDirectory +
+                StringConstant.VirastarFolder;
+
+
+            if (!Directory.Exists(virastarFolder))
+                return new List<string>();
+
+
+            return Directory.GetFiles(virastarFolder, "*.csv")
+                .Where(file =>
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(file);
+
+                    return fileName.EndsWith(code);
+                })
+                .ToList();
+        }
+
+
+        private static readonly HttpClient HttpClient = new HttpClient();
+
+        private const string CsvListUrl = "https://shivanegar.ir/api/getcsv";
+
+
+        public static async Task DownloadAllCsvFilesAsync()
+        {
+            try
+            {
+                // مسیر پوشه‌ای که کدهای فعلی از آن می‌خوانند
+                string virastarFolder =
+                    Properties.Settings.Default.WorkSpaceDirectory +
+                    StringConstant.VirastarFolder;
+
+
+                // اگر پوشه وجود نداشت بساز
+                if (!Directory.Exists(virastarFolder))
+                {
+                    Directory.CreateDirectory(virastarFolder);
+                }
+
+
+                // گرفتن لیست فایل‌ها از API
+                List<string> csvUrls = await GetCsvUrlsAsync();
+
+
+                foreach (string csvUrl in csvUrls)
+                {
+                    try
+                    {
+                        await DownloadFileAsync(csvUrl, virastarFolder);
+                    }
+                    catch (Exception ex)
+                    {
+                        // اگر یک فایل مشکل داشت، بقیه ادامه پیدا کنند
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("خطا در دانلود CSV ها : " + ex.Message);
+            }
+        }
+
+
+
+        private static async Task<List<string>> GetCsvUrlsAsync()
+        {
+            string json = await HttpClient.GetStringAsync(CsvListUrl);
+           
+
+            var response =
+                System.Text.Json.JsonSerializer.Deserialize<CsvListResponse>(
+                json,
+                new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+
+            if (response == null ||
+                response.Status != "1" ||
+                response.Csv == null)
+            {
+                throw new Exception("دریافت لیست CSV ها ناموفق بود.");
+            }
+
+
+            return response.Csv;
+        }
+
+
+        private static async Task DownloadFileAsync(
+        string url,
+        string folder)
+        {
+            byte[] data =
+                await HttpClient.GetByteArrayAsync(url);
+
+
+            string fileName =
+                Path.GetFileName(new Uri(url).LocalPath);
+
+
+            string filePath =
+                Path.Combine(folder, fileName);
+
+            File.WriteAllBytes(filePath, data);
+
+
+            Console.WriteLine("Downloaded : " + fileName);
+        }
+
+
+
+        private class CsvListResponse
+        {
+            public string Status { get; set; }
+
+            public List<string> Csv { get; set; }
+        }
+    }
+    #endregion
+
+
+    #region CSVCode
+
+    public static class VirastarCodes
+    {
+        public const string HalfSpace = "1002";
+        public const string Signs = "1003";
+        public const string SpellingCorrection = "1001";
+        public const string Standard = "1004";
+        public const string Tanvin = "1000";
+    }
+
+    #endregion
+
+
 }

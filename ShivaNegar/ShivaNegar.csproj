@@ -658,12 +658,6 @@
     <EmbeddedResource Include="Constants\NahjBalagheFiles\Nameh.csv" />
     <EmbeddedResource Include="Constants\QuranFiles\Ayeh.csv" />
     <EmbeddedResource Include="Constants\QuranFiles\Surah.csv" />
-    <EmbeddedResource Include="Constants\VirastarFiles\HalfSpace.csv" />
-    <EmbeddedResource Include="Constants\VirastarFiles\Signs.csv" />
-    <EmbeddedResource Include="Constants\VirastarFiles\Standard.csv" />
-    <EmbeddedResource Include="Constants\VirastarFiles\Tanvin.csv" />
-    <EmbeddedResource Include="Constants\VirastarFiles\SpellingCorrection.csv" />
-    <EmbeddedResource Include="Constants\VirastarFiles\Tashdid.csv" />
     <EmbeddedResource Include="Constants\OtherFiles\Dedicate.csv" />
     <None Include="packages.config" />
     <EmbeddedResource Include="Resources\Fonts\B Badr Bold.ttf" />
